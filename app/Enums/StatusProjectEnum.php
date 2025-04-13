@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Enums;
+
+enum StatusProjectEnum: string
+{
+    case SUCCESS = 'success';
+    case MOVED = 'moved';
+    case CLIENT_ERROR = 'client_error';
+    case SERVER_ERROR = 'server_error';
+    case UNKNOWN = 'unknown';
+    public static function getStatus(int $status): self
+    {
+        if ($status >= 200 && $status < 300) {
+            return self::SUCCESS;
+        }
+        if ($status >= 300 && $status < 400) {
+            return self::MOVED;
+        }
+        if ($status >= 400 && $status < 500) {
+            return self::CLIENT_ERROR;
+        }
+        if ($status >= 500 && $status < 600) {
+            return self::SERVER_ERROR;
+        }
+        return self::UNKNOWN;
+    }
+}
