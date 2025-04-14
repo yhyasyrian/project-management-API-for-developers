@@ -6,9 +6,11 @@ use App\Enums\StatusProjectEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
+    use HasFactory;
     protected $table = 'projects';
     protected $fillable = [
         'name',
@@ -39,8 +41,9 @@ class Project extends Model
     {
         return $this->hasMany(Tag::class);
     }
-    public function getStatusLabelAttribute(): StatusProjectEnum
+    public function getStatusEnumAttribute(): StatusProjectEnum
     {
         return StatusProjectEnum::getStatus($this->status);
     }
+    public $timestamps = false;
 }

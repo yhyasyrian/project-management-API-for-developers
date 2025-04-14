@@ -25,4 +25,14 @@ enum StatusProjectEnum: string
         }
         return self::UNKNOWN;
     }
+    public function getStatusNumber(): int
+    {
+        return match ($this) {
+            self::SUCCESS => 200,
+            self::MOVED => 301,
+            self::CLIENT_ERROR => 400,
+            self::SERVER_ERROR => 500,
+            self::UNKNOWN => 600,
+        };
+    }
 }

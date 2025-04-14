@@ -5,9 +5,11 @@ namespace App\Models;
 use App\Enums\TypeContactEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ContactInformation extends Model
 {
+    use HasFactory;
     protected $table = 'contact_information';
     protected $fillable = [
         'type',
@@ -21,5 +23,5 @@ class ContactInformation extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public $timestamps = false;
 }

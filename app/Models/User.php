@@ -62,5 +62,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(ContactInformation::class);
     }
-
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+    public function isAdmin(): bool
+    {
+        return $this->type === TypeUserEnum::ADMIN;
+    }
 }
