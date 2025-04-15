@@ -21,7 +21,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(10)
+        User::create([
+            'name' => config('app.admin.name'),
+            'email' => config('app.admin.email'),
+            'password' => config('app.admin.password'),
+            'type' => TypeUserEnum::ADMIN->value,
+        ]);
+        if (app()->environment('local')) {
+            $this->createFactoryData();
+        }
+    }
+    private function createFactoryData()
+    {
+        User::factory(10)
             ->has(
                 Project::factory(2)->has(Task::factory(6))
                     ->has(Tag::factory(20))
@@ -33,11 +45,5 @@ class DatabaseSeeder extends Seeder
         BankAccount::factory(10)->create();
         Experience::factory(30)->create();
         Certification::factory(20)->create();
-        User::create([
-            'name' => config('app.admin.name'),
-            'email' => config('app.admin.email'),
-            'password' => config('app.admin.password'),
-            'type' => TypeUserEnum::ADMIN->value,
-        ]);
     }
 }
