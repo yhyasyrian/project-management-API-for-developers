@@ -42,7 +42,7 @@
         "http"
     ],
     "paths": {
-        "auth/login": {
+        "/auth/login": {
             "post": {
                 "tags": [
                     "user"
@@ -116,7 +116,7 @@
                 }
             }
         },
-        "auth/logout": {
+        "/auth/logout": {
             "post": {
                 "tags": [
                     "user"
@@ -144,7 +144,7 @@
                 }
             }
         },
-        "user": {
+        "/user": {
             "get": {
                 "tags": [
                     "user"
@@ -175,14 +175,9 @@
                                     "default": true
                                 },
                                 "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "users": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/User"
-                                            }
-                                        }
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/User"
                                     }
                                 }
                             }
@@ -266,17 +261,11 @@
                         "schema": {
                             "$ref": "#/components/schemas/AuthenticationError"
                         }
-                    },
-                    "429": {
-                        "description": "Too Many Requests",
-                        "schema": {
-                            "$ref": "#/components/schemas/TooManyRequests"
-                        }
                     }
                 }
             }
         },
-        "user/{id}": {
+        "/user/{id}": {
             "get": {
                 "tags": [
                     "user"
@@ -300,7 +289,17 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/components/schemas/UserInfo"
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserInfo"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -506,7 +505,7 @@
                 }
             }
         },
-        "user/{idUser}/contact-information": {
+        "/user/{idUser}/contact-information": {
             "post": {
                 "tags": [
                     "user"
@@ -564,7 +563,7 @@
                 }
             }
         },
-        "user/{idUser}/contact-information/{id}": {
+        "/user/{idUser}/contact-information/{id}": {
             "patch": {
                 "tags": [
                     "user"
