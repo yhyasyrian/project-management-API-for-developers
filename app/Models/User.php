@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\TypeUserEnum;
+use App\Enums\UserTypeEnum;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,7 +47,7 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'type' => TypeUserEnum::class,
+            'type' => UserTypeEnum::class,
         ];
     }
     public function getJWTIdentifier()
@@ -68,6 +68,6 @@ class User extends Authenticatable implements JWTSubject
     }
     public function isAdmin(): bool
     {
-        return $this->type === TypeUserEnum::ADMIN;
+        return $this->type === UserTypeEnum::ADMIN;
     }
 }

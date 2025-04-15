@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\TypeContactEnum;
+use App\Enums\ContactTypeEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('contact_information', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', array_column(TypeContactEnum::cases(), 'value'))->default(TypeContactEnum::EMAIL->value);
+            $table->enum('type', array_column(ContactTypeEnum::cases(), 'value'))->default(ContactTypeEnum::EMAIL->value);
             $table->string('value');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();

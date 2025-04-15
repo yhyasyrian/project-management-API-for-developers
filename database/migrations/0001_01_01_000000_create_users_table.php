@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\TypeUserEnum;
+use App\Enums\UserTypeEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('type', array_column(TypeUserEnum::cases(), 'value'))->default(TypeUserEnum::USER->value);
+            $table->enum('type', array_column(UserTypeEnum::cases(), 'value'))->default(UserTypeEnum::USER->value);
             $table->rememberToken();
             $table->timestamps();
         });

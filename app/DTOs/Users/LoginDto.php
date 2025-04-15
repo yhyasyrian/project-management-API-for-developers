@@ -1,10 +1,9 @@
 <?php
-namespace App\DTOs;
+namespace App\DTOs\Users;
 
-readonly class RegisterDto
+readonly class LoginDto
 {
     public function __construct(
-        public string $name,
         public string $email,
         public string $password,
     ) {}

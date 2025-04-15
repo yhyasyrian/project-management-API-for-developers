@@ -420,13 +420,16 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "new_password": {
+                                "password": {
+                                    "type": "string"
+                                },
+                                "password_confirmation": {
                                     "type": "string"
                                 }
                             },
                             "required": [
-                                "current_password",
-                                "new_password"
+                                "password",
+                                "password_confirmation"
                             ]
                         }
                     }

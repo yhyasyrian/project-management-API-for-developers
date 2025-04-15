@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\StatusTaskEnum;
+use App\Enums\TaskStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('content')->nullable();
             $table->boolean('can_view_for_client')->default(false);
-            $table->enum('status', array_column(StatusTaskEnum::cases(), 'value'))->default(StatusTaskEnum::PENDING->value);
+            $table->enum('status', array_column(TaskStatusEnum::cases(), 'value'))->default(TaskStatusEnum::PENDING->value);
             $table->timestamps();
         });
     }

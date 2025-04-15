@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\StatusTaskEnum;
+use App\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +19,7 @@ class Task extends Model
         'can_view_for_client',
     ];
     protected $casts = [
-        'status' => StatusTaskEnum::class,
+        'status' => TaskStatusEnum::class,
         'can_view_for_client' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

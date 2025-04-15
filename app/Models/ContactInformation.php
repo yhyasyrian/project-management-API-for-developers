@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\TypeContactEnum;
+use App\Enums\ContactTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +17,7 @@ class ContactInformation extends Model
         'user_id'
     ];
     protected $casts = [
-        'type' => TypeContactEnum::class,
+        'type' => ContactTypeEnum::class,
     ];
     public function user(): BelongsTo
     {

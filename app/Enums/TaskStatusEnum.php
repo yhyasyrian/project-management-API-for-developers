@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum StatusTaskEnum:string
+enum TaskStatusEnum:string
 {
     case PENDING = 'pending';
     case IN_PROGRESS = 'in_progress';

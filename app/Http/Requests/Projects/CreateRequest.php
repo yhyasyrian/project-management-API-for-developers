@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Projects;
 
-use App\Enums\StatusProjectEnum;
+use Illuminate\Validation\Rule;
+use App\Enums\ProjectStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -30,7 +31,7 @@ class CreateRequest extends FormRequest
             'price' => ['required','numeric','min:0'],
             'domain' => ['nullable','string','max:255'],
             'route_check' => ['nullable','string','max:255'],
-            'status' => ['in:' . implode(',', array_column(StatusProjectEnum::cases(), 'value'))],
+            'status' => ['required',Rule::enum(ProjectStatusEnum::class)],
             'can_check' => ['nullable','boolean'],
             'start_at' => ['required','date'],
             'end_at' => ['nullable','date','after:start_at'],

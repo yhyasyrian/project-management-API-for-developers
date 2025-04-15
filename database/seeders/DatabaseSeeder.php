@@ -7,7 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Experience;
-use App\Enums\TypeUserEnum;
+use App\Enums\UserTypeEnum;
 use App\Models\BankAccount;
 use App\Models\Certification;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'name' => config('app.admin.name'),
             'email' => config('app.admin.email'),
             'password' => config('app.admin.password'),
-            'type' => TypeUserEnum::ADMIN->value,
+            'type' => UserTypeEnum::ADMIN->value,
         ]);
         if (app()->environment('local')) {
             $this->createFactoryData();

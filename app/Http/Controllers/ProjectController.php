@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\ProjectService;
 use App\Services\ApiResponseService;
-use App\Http\Requests\Project\CreateRequest;
+use App\Http\Requests\Projects\CreateRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 

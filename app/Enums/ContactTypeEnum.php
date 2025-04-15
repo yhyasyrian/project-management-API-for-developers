@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum TypeContactEnum:string
+enum ContactTypeEnum:string
 {
     case WHATSAPP = 'whatsapp';
     case TELEGRAM = 'telegram';

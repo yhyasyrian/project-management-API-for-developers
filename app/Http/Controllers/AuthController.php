@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\LoginDto;
-use App\DTOs\RegisterDto;
+use App\DTOs\Users\LoginDto;
 use App\Services\AuthService;
 use App\Services\ApiResponseService;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -23,15 +21,9 @@ class AuthController extends Controller
             )
         ]);
     }
-    public function register(RegisterRequest $request)
+    public function logout()
     {
-        $this->authService->register(
-            new RegisterDto(
-                name: $request->name,
-                email: $request->email,
-                password: $request->password
-            )
-        );
-        return ApiResponseService::success([],201);
+        $this->authService->logout();
+        return ApiResponseService::success([],200);
     }
 }

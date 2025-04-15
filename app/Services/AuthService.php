@@ -2,8 +2,8 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\DTOs\LoginDto;
-use App\DTOs\RegisterDto;
+use App\DTOs\Users\LoginDto;
+use App\DTOs\Users\RegisterDto;
 use App\Events\AccessAccount;
 use App\Events\CreateAccount;
 use App\Exceptions\PublicException;
@@ -34,5 +34,14 @@ class AuthService
         ]);
         event(new CreateAccount($user));
         return;
+    }
+    public function logout():void
+    {
+        auth()->logout();
+    }
+    public function changePassword(User $user = null, string $password):void
+    {
+        $user ??= auth()->user();
+        $user->update(['password' => bcrypt($password)]);
     }
 }

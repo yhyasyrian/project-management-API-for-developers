@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\StatusProjectEnum;
+use App\Enums\ProjectStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,9 +41,9 @@ class Project extends Model
     {
         return $this->hasMany(Tag::class);
     }
-    public function getStatusEnumAttribute(): StatusProjectEnum
+    public function getStatusEnumAttribute(): ProjectStatusEnum
     {
-        return StatusProjectEnum::getStatus($this->status);
+        return ProjectStatusEnum::getStatus($this->status);
     }
     public $timestamps = false;
 }
