@@ -15,7 +15,7 @@ class TaskFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence(6),
-            'information' => $this->faker->paragraphs(3, true),
+            'content' => $this->faker->paragraphs(3, true),
             'status' => $this->faker->randomElement(array_column(StatusTaskEnum::cases(), 'value')),
             'can_view_for_client' => $this->faker->boolean(),
         ];

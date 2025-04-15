@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->string('name');
-            $table->text('information')->nullable();
+            $table->text('content')->nullable();
             $table->boolean('can_view_for_client')->default(false);
             $table->enum('status', array_column(StatusTaskEnum::cases(), 'value'))->default(StatusTaskEnum::PENDING->value);
             $table->timestamps();

@@ -20,7 +20,7 @@ class TaskResource extends JsonResource
             'project' => $this->whenLoaded('project', fn () => $this->project->name),
             'status' => $this->status->value,
             'client_view' => $this->can_view_for_client,
-            'information' => $this->information,
+            'content' => $this->content,
         ];
     }
 }

@@ -14,7 +14,7 @@ class Task extends Model
     protected $fillable = [
         'name',
         'project_id',
-        'information',
+        'content',
         'status',
         'can_view_for_client',
     ];

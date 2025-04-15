@@ -33,10 +33,6 @@
             "description": "CRUD operations for certifications"
         },
         {
-            "name": "task",
-            "description": "CRUD operations for tasks, and related to customer and project"
-        },
-        {
             "name": "bank",
             "description": "Know your bank balance and transaction records, and send money to your customers"
         }
@@ -46,104 +42,12 @@
         "http"
     ],
     "paths": {
-        "/project": {
-            "get": {
-                "tags": [
-                    "project"
-                ],
-                "summary": "Get all projects",
-                "description": "Get all projects with pagination",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "type": "integer",
-                        "default": 1
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "ok": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "projects": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/Project"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "project"
-                ],
-                "summary": "Create a new project",
-                "description": "Create a new project",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Project object that needs to be added to the store",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/CreateProjectModel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Done Create Project",
-                        "schema": {
-                            "$ref": "#/components/schemas/SuccessOperation"
-                        }
-                    },
-                    "422": {
-                        "description": "Validation Errors",
-                        "schema": {
-                            "$ref": "#/components/schemas/ValidationErrors"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/components/schemas/AuthenticationError"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/components/schemas/AuthenticationError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/components/schemas/ErrorServer"
-                        }
-                    }
-                }
-            }
-        },
         "auth/login": {
             "post": {
                 "tags": [
                     "user"
                 ],
-                "summary": "Login",
+                "summary": "Login admin or client",
                 "description": "Login with email and password",
                 "parameters": [
                     {
@@ -203,12 +107,6 @@
                             "$ref": "#/components/schemas/AuthenticationError"
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/components/schemas/AuthenticationError"
-                        }
-                    },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
@@ -235,12 +133,6 @@
                         "description": "Done Logout",
                         "schema": {
                             "$ref": "#/components/schemas/SuccessOperation"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/components/schemas/AuthenticationError"
                         }
                     },
                     "403": {
@@ -314,8 +206,8 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "Register",
-                "description": "Register with email and password, operation only for admin",
+                "summary": "Create user",
+                "description": "Create user as client with email and password, operation only for admin",
                 "security": [
                     {
                         "jwt": []
@@ -645,7 +537,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/components/schemas/SuccessOperation"
@@ -777,10 +669,1863 @@
                             "$ref": "#/components/schemas/AuthenticationError"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
                         "schema": {
                             "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/project": {
+            "get": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get all projects",
+                "description": "Get all projects with pagination",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Project"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Create a new project",
+                "description": "Create a new project for admin",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Project object that needs to be added to the store",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateProjectModel"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Project",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{id}": {
+            "get": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get project by id for client",
+                "description": "Get project by id for client",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProjectInfo"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Update project by id",
+                "description": "Update project information by id from admin",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Project object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateProjectModel"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Delete project by id",
+                "description": "Delete project by id form admin",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{idProject}": {
+            "get": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get project by id for admin",
+                "description": "same as get project by id but for admin, with it admin can know count task and client",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/ProjectInfoForAdmin"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{idProject}/tag": {
+            "post": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Create a new tag for current project by admin",
+                "description": "Create a new tag for current project by admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Task object that needs to be added to the project",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Tag",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Delete All tag for current project by admin",
+                "description": "Delete All tag for current project by admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Tag",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{idProject}/tag/{id}": {
+            "put": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Update tag by id for admin",
+                "description": "Update tag by id for admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Tag object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Tag",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Delete tag by id in current project by admin",
+                "description": "Delete tag by id in current project by admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Tag",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{idProject}/task": {
+            "get": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Get all tasks",
+                "description": "Get all tasks with pagination for current project, can admin and client show it",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Tasks"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Create a new task",
+                "description": "Create a new task",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Task object that needs to be added to the project",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Tasks"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Task",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{idProject}/task/{id}": {
+            "put": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Update task by id for admin",
+                "description": "Update task information by id for admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Task object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Tasks"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Task",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Change status task by id for admin",
+                "description": "Change status task by id for admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Task object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "enum": [
+                                        "pending",
+                                        "in_progress",
+                                        "completed",
+                                        "cancelled"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Task",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "project"
+                ],
+                "summary": "Delete task by id for admin",
+                "description": "Delete task by id for admin",
+                "parameters": [
+                    {
+                        "name": "idProject",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Task",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            }
+        },
+        "/experience": {
+            "get": {
+                "tags": [
+                    "experience"
+                ],
+                "summary": "Get all experiences",
+                "description": "Get all experiences with pagination",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Experience"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "experience"
+                ],
+                "summary": "Create a new experience for admin",
+                "description": "Create a new experience for admin",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Experience object that needs to be added",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Experience"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Experience",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/experience/{id}": {
+            "delete": {
+                "tags": [
+                    "experience"
+                ],
+                "summary": "Delete experience by id for admin",
+                "description": "Delete experience by id for admin",
+                "operationId": "deleteExperience",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Experience id to delete",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Experience",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Experience not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "experience"
+                ],
+                "summary": "Update experience by id for admin",
+                "description": "Update experience by id for admin",
+                "operationId": "updateExperience",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Experience id to update",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Experience object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Experience"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Experience",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Experience not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/certification": {
+            "get": {
+                "tags": [
+                    "certification"
+                ],
+                "summary": "Get all certifications",
+                "description": "Get all certifications with pagination",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Certification"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "certification"
+                ],
+                "summary": "Create a new certification for admin",
+                "description": "Create a new certification for admin",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Certification object that needs to be added",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Certification"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Certification",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/certification/{id}": {
+            "delete": {
+                "tags": [
+                    "certification"
+                ],
+                "summary": "Delete a certification by id for admin",
+                "description": "Delete a certification by id for admin",
+                "operationId": "deleteCertification",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Certification ID to delete",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Certification",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Certification not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "certification"
+                ],
+                "summary": "Update a certification by id for admin",
+                "description": "Update a certification by id for admin",
+                "operationId": "updateCertification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Certification ID to update",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Certification object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Certification"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Certification",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Certification not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account": {
+            "get": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Get all bank accounts for admin",
+                "description": "Get all bank accounts with pagination for admin",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "default": 1
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/BankAccount"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Create a new bank account for admin",
+                "description": "Create a new bank account for admin",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Bank account object that needs to be added",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/BankAccountCreate"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Done Create Bank Account",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/{id}": {
+            "delete": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Delete a bank account by id for admin",
+                "description": "Delete a bank account by id for admin",
+                "operationId": "deleteBankAccount",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account ID to delete",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Delete Bank Account",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Update a bank account",
+                "description": "Update a bank account by ID",
+                "operationId": "updateBankAccount",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account ID to update",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Bank account object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BankAccount"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Bank Account",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Update a username or password of bank account",
+                "description": "Update a username or password of bank account by ID",
+                "operationId": "updateBankAccountUsernameOrPassword",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account ID to update",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Bank account object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "username",
+                                "password"
+                            ]
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Update Bank Account Username or Password",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Get a record of bank account",
+                "description": "Get a record of bank account by ID",
+                "operationId": "getBankAccountRecordById",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Bank account ID to get record",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ok": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BankAccountRecord"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "send money to other account",
+                "description": "Send money to other account",
+                "operationId": "sendMoneyToOtherAccount",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "bank_account_id",
+                        "description": "Bank account ID to send money",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Bank account object that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "amount": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "to": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "amount",
+                                "description",
+                                "to"
+                            ]
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create invoice in system, and send OTP to email for verification",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "402": {
+                        "description": "You have not enough balance",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    }
+                }
+            }
+        },
+        "/bank-account/verify-otp": {
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "summary": "Verify OTP",
+                "description": "Verify OTP to send money to other account",
+                "operationId": "verifyOTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "OTP object that needs to be verified",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "otp": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "otp"
+                            ]
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Done Verify OTP and send money to other account",
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessOperation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "402": {
+                        "description": "You have not enough balance",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthenticationError"
+                        }
+                    },
+                    "404": {
+                        "description": "Bank account not found",
+                        "schema": {
+                            "$ref": "#/components/schemas/PageNotFound"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Errors",
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorServer"
                         }
                     }
                 }
@@ -893,11 +2638,6 @@
                 "name": {
                     "type": "string"
                 },
-                "project": {
-                    "$ref": "#/definitions/Project",
-                    "nullable": true,
-                    "description": "The project name associated with the task. May be null if not loaded."
-                },
                 "status": {
                     "type": "string",
                     "enum": [
@@ -910,8 +2650,9 @@
                 "client_view": {
                     "type": "boolean"
                 },
-                "information": {
-                    "type": "string"
+                "content": {
+                    "type": "string",
+                    "example": "<h1>Hello World</h1>"
                 }
             },
             "xml": {
@@ -952,7 +2693,8 @@
                     "type": "string"
                 },
                 "content": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "<h1>Hello World</h1>"
                 },
                 "start_date": {
                     "type": "string",
@@ -1159,6 +2901,103 @@
                                 }
                             }
                         }
+                    }
+                ]
+            },
+            "ProjectInfo": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/Project"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "tags": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Tag"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "ProjectInfoForAdmin": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ProjectInfo"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "count_tasks": {
+                                "type": "integer"
+                            },
+                            "client": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                ]
+            },
+            "Tag": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BankAccountRecord": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "string"
+                    },
+                    "to": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^\\d{4}/\\d{2}/\\d{2}$"
+                    }
+                },
+                "xml": {
+                    "name": "BankAccountRecord"
+                }
+            },
+            "BankAccountCreate": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/BankAccount"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "username": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "username",
+                            "password"
+                        ]
                     }
                 ]
             }
