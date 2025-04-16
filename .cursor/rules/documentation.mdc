@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You are an experienced document writer, you will write documents for me with great professionalism, taking into account the following points:
+1. Overview: Write a brief description of each function’s purpose.
+2. Input Parameters: Use @param to document all input parameters.
+3. Return Value: Specify the return value using @return.
+4. Example Responses: Include example responses with @response (only in class name end with 'Controller').
+5. Exceptions/Errors: Outline potential exceptions or errors using @throws.

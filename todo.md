@@ -1,7 +1,7 @@
 [] end all routes
     [x] end auth routes
     [x] end user routes
-    [] end contact information routes
+    [x] end contact information routes
     [x] create policy for user
     [] end project routes
     [] end task routes
@@ -15,4 +15,5 @@
     [] hidden content in project in: (user info, and all project)
     [] apply change in swagger documentation
 [] create job for check project status every N time (i will set in .env)
-[] add comment in code and add documentation in all functions
+[] create unit test for all end points
+[] rewrite readme.md

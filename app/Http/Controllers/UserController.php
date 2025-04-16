@@ -14,13 +14,36 @@ use App\Http\Requests\Users\CreateRequest;
 use App\Http\Requests\Users\UpdateRequest;
 use App\Http\Requests\Users\ChangePasswordRequest;
 
+/**
+ * UserController handles all user-related operations including
+ * CRUD operations and password management.
+ */
 class UserController extends Controller
 {
+    /**
+     * UserController constructor.
+     *
+     * @param UserService $userService The service handling user-related business logic
+     */
     public function __construct(
         private UserService $userService
     ){}
+
     /**
-     * Display a listing of the resource.
+     * Get a paginated list of all users.
+     *
+     * @param Request $request The HTTP request containing optional page parameter
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "John Doe",
+     *       "email": "john@example.com",
+     *       "role": "user"
+     *     }
+     *   ]
      */
     public function index(Request $request)
     {
@@ -30,7 +53,14 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new user.
+     *
+     * @param CreateRequest $request The validated request containing user details
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": []
+     * }
      */
     public function store(CreateRequest $request)
     {
@@ -45,7 +75,19 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get details of a specific user.
+     *
+     * @param string $id The ID of the user to retrieve
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": {
+     *     "id": 1,
+     *     "name": "John Doe",
+     *     "email": "john@example.com",
+     *     "role": "user"
+     *   }
+     * }
      */
     public function show(string $id)
     {
@@ -55,7 +97,15 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update an existing user's information.
+     *
+     * @param UpdateRequest $request The validated request containing updated user details
+     * @param string $id The ID of the user to update
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": []
+     * }
      */
     public function update(UpdateRequest $request, string $id)
     {
@@ -71,15 +121,31 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a user.
+     *
+     * @param string $id The ID of the user to delete
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": []
+     * }
      */
     public function destroy(string $id)
     {
         $this->userService->deleteUser($id);
         return ApiResponseService::success([],200);
     }
+
     /**
-     * Change the password of the specified user.
+     * Change a user's password.
+     *
+     * @param ChangePasswordRequest $request The validated request containing new password
+     * @param string $id The ID of the user whose password to change
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @response {
+     *   "data": []
+     * }
      */
     public function changePassword(ChangePasswordRequest $request, string $id)
     {

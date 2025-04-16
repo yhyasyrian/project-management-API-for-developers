@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->type->value,
             'projects' => ProjectResource::collection($this->whenLoaded('projects')),
-            'contact_information' => ContactInformationResource::collection($this->whenLoaded('contactInformation')),
+            'contact_information' => ContactInformationResource::collection($this->whenLoaded('contactInformations')),
         ];
     }
 }
