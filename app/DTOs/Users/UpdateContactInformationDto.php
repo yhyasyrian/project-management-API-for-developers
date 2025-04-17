@@ -8,7 +8,6 @@ readonly class UpdateContactInformationDto
 {
     public function __construct(
         public User $user,
-        public int $id,
         public string $value,
     ) {}
 }

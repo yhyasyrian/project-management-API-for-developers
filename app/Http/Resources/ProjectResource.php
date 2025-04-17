@@ -18,14 +18,17 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'client' => $this->whenLoaded('client', fn() => UserResource::make($this->client)->toArray($request)),
-            'content' => $this->content,
-            'price' => $this->price,
+            $this->mergeWhen(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->id == $this->client_id), [
+                'countTask' => $this->whenCounted('tasks'),
+                'price' => $this->price,
+            ]),
+            $this->mergeWhen(auth()->check() && auth()->user()->isAdmin(), [
+                'client' => $this->whenLoaded('user', fn() => UserResource::make($this->user)),
+            ]),
             'domain' => $this->url,
             'status' => $this->statusEnum->value,
             'start_at' => $this->start_at->format('Y/m/d'),
             'end_at' => $this->end_at->format('Y/m/d'),
-            'countTask' => $this->whenCounted('tasks'),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
         ];
     }

@@ -52,9 +52,9 @@ trait AuthorizationTrait
     /**
      * Check if user can create new instances of a model
      */
-    protected function canCreate()
+    protected function canCreate(Model|string $model)
     {
-        $this->can(AuthorizationActionEnum::CREATE);
+        $this->can(AuthorizationActionEnum::CREATE, $model);
     }
 
     /**

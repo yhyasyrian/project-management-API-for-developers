@@ -37,7 +37,7 @@ class UserService
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      * @throws \Illuminate\Auth\Access\AuthorizationException If user is not authorized
      */
-    public function getAllUsers(int $page)
+    public function getAll(int $page)
     {
         $this->canViewAny(User::class);
         $users = $this->user
@@ -53,9 +53,9 @@ class UserService
      * @return void
      * @throws \Illuminate\Auth\Access\AuthorizationException If user is not authorized
      */
-    public function createUser(RegisterDto $data)
+    public function create(RegisterDto $data)
     {
-        $this->canCreate();
+        $this->canCreate(User::class);
         return $this->authService->register($data);
     }
 
@@ -67,7 +67,7 @@ class UserService
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If user not found
      * @throws \Illuminate\Auth\Access\AuthorizationException If user is not authorized
      */
-    public function getUserById(string $id)
+    public function getById(string $id)
     {
         $user = $this->user->with(['projects', 'contactInformations'])->findOrFail($id);
         $this->canView($user);
@@ -83,7 +83,7 @@ class UserService
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If user not found
      * @throws \Illuminate\Auth\Access\AuthorizationException If user is not authorized
      */
-    public function updateUser(string $id, UpdateDto $data)
+    public function update(string $id, UpdateDto $data)
     {
         $user = $this->user->findOrFail($id);
         $this->canUpdate($user);
@@ -102,7 +102,7 @@ class UserService
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If user not found
      * @throws \Illuminate\Auth\Access\AuthorizationException If user is not authorized
      */
-    public function deleteUser(string $id)
+    public function delete(string $id)
     {
         $user = $this->user->findOrFail($id);
         $this->canDelete($user);

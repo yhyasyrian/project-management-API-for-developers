@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ContactInformationController;
 
 Route::prefix('auth')->group(function () {
@@ -17,3 +18,5 @@ Route::put('/user/{id}', [UserController::class, 'update'])->middleware(['auth:a
 Route::apiResource('/user/{user}/contact-information', ContactInformationController::class)
     ->only(['store', 'update', 'destroy'])
     ->middleware(['auth:api']);
+
+Route::apiResource('/project', ProjectController::class);

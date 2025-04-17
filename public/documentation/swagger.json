@@ -2774,10 +2774,17 @@
                         "properties": {
                             "client_id": {
                                 "type": "integer"
+                            },
+                            "route_check": {
+                                "type": "string"
+                            },
+                            "can_check": {
+                                "type": "boolean"
                             }
                         },
                         "required": [
-                            "client_id"
+                            "client_id",
+                            "route_check"
                         ]
                     }
                 ]

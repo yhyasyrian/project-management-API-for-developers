@@ -11,7 +11,6 @@ use App\DTOs\Users\CreateContactInformationDto;
 use App\DTOs\Users\UpdateContactInformationDto;
 use App\Http\Requests\ContactInformations\CreateRequest;
 use App\Http\Requests\ContactInformations\UpdateRequest;
-use App\Traits\AuthorizationTrait;
 
 /**
  * Controller for managing user contact information
@@ -22,7 +21,6 @@ use App\Traits\AuthorizationTrait;
  */
 class ContactInformationController extends Controller
 {
-    use AuthorizationTrait;
 
     /**
      * Constructor for dependency injection
@@ -46,9 +44,6 @@ class ContactInformationController extends Controller
      */
     public function store(User $user, CreateRequest $request)
     {
-        // Check if the authenticated user has permission to update this user's contact information
-        $this->canUpdate($user);
-
         // Create new contact information using the service
         $this->contactInformationService->create(
             new CreateContactInformationDto(
@@ -76,14 +71,11 @@ class ContactInformationController extends Controller
      */
     public function update(User $user, int $id, UpdateRequest $request)
     {
-        // Check if the authenticated user has permission to update this user's contact information
-        $this->canUpdate($user);
-
         // Update the contact information using the service
         $this->contactInformationService->update(
+            $id,
             new UpdateContactInformationDto(
                 user: $user,
-                id: $id,
                 value: $request->get('value')
             )
         );
@@ -105,12 +97,8 @@ class ContactInformationController extends Controller
      */
     public function destroy(User $user, int $id)
     {
-        // Check if the authenticated user has permission to update this user's contact information
-        $this->canUpdate($user);
-
         // Delete the contact information using the service
         $this->contactInformationService->delete($user, $id);
-
         // Return success response
         return ApiResponseService::success([]);
     }

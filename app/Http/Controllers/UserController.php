@@ -27,7 +27,8 @@ class UserController extends Controller
      */
     public function __construct(
         private UserService $userService
-    ){}
+    ) {
+    }
 
     /**
      * Get a paginated list of all users.
@@ -48,7 +49,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         return ApiResponseService::success(
-            $this->userService->getAllUsers($request->get('page', 1))
+            $this->userService->getAll($request->get('page', 1))
         );
     }
 
@@ -64,14 +65,14 @@ class UserController extends Controller
      */
     public function store(CreateRequest $request)
     {
-        $this->userService->createUser(
+        $this->userService->create(
             new RegisterDto(
                 name: $request->get('name'),
                 email: $request->get('email'),
                 password: $request->get('password')
             )
         );
-        return ApiResponseService::success([],201);
+        return ApiResponseService::success([], 201);
     }
 
     /**
@@ -82,17 +83,37 @@ class UserController extends Controller
      *
      * @response {
      *   "data": {
-     *     "id": 1,
-     *     "name": "John Doe",
-     *     "email": "john@example.com",
-     *     "role": "user"
+     *     "id": 0,
+     *     "name": "string",
+     *     "email": "string",
+     *     "role": "developer",
+     *     "projects": [
+     *       {
+     *         "id": 0,
+     *         "name": "string",
+     *         "description": "string",
+     *         "content": "string",
+     *         "price": "string",
+     *         "domain": "string",
+     *         "status": "success",
+     *         "start_at": "2025-04-17T18:48:13.832Z",
+     *         "end_at": "2025-04-17T18:48:13.832Z"
+     *       }
+     *     ],
+     *     "contact_information": [
+     *       {
+     *         "id": 0,
+     *         "label": "whatsapp",
+     *         "value": "string"
+     *       }
+     *     ]
      *   }
      * }
      */
     public function show(string $id)
     {
         return ApiResponseService::success(
-            $this->userService->getUserById($id)
+            $this->userService->getById($id)
         );
     }
 
@@ -112,12 +133,12 @@ class UserController extends Controller
         $request->validate([
             'email' => Rule::unique(User::class)->ignore($id),
         ]);
-        $this->userService->updateUser($id, new UpdateDto(
+        $this->userService->update($id, new UpdateDto(
             name: $request->get('name'),
             email: $request->get('email'),
             role: UserTypeEnum::from($request->get('role'))
         ));
-        return ApiResponseService::success([],200);
+        return ApiResponseService::success([], 200);
     }
 
     /**
@@ -132,8 +153,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->userService->deleteUser($id);
-        return ApiResponseService::success([],200);
+        $this->userService->delete($id);
+        return ApiResponseService::success([], 200);
     }
 
     /**
@@ -150,6 +171,6 @@ class UserController extends Controller
     public function changePassword(ChangePasswordRequest $request, string $id)
     {
         $this->userService->changePassword($id, $request->get('password'));
-        return ApiResponseService::success([],200);
+        return ApiResponseService::success([], 200);
     }
 }

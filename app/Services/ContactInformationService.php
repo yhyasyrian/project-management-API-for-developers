@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\ContactInformation;
+use App\Traits\AuthorizationTrait;
 use App\Exceptions\PublicException;
 use App\DTOs\Users\CreateContactInformationDto;
 use App\DTOs\Users\UpdateContactInformationDto;
@@ -15,7 +17,8 @@ use App\DTOs\Users\UpdateContactInformationDto;
  */
 class ContactInformationService
 {
-    public function __construct()
+    use AuthorizationTrait;
+    public function __construct(private ContactInformation $contactInformation)
     {
     }
 
@@ -27,9 +30,11 @@ class ContactInformationService
      */
     public function create(CreateContactInformationDto $dto)
     {
-        $dto->user->contactInformations()->create([
+        $this->canUpdate($dto->user);
+        $this->contactInformation->create([
             'type' => $dto->type,
             'value' => $dto->value,
+            'user_id' => $dto->user->id,
         ]);
     }
 
@@ -40,14 +45,12 @@ class ContactInformationService
      * @return void
      * @throws PublicException If the contact information is not found (404)
      */
-    public function update(UpdateContactInformationDto $dto)
+    public function update(int $id, UpdateContactInformationDto $dto)
     {
-        $isUpdate = $dto->user->contactInformations()->where('id', $dto->id)->update([
+        $this->canUpdate($dto->user);
+        $this->contactInformation->findOrFail($id)->update([
             'value' => $dto->value,
         ]);
-        if (!$isUpdate) {
-            throw new PublicException('Contact information not found',404);
-        }
     }
 
     /**
@@ -60,9 +63,7 @@ class ContactInformationService
      */
     public function delete(User $user, int $id)
     {
-        $isDelete = $user->contactInformations()->where('id', $id)->delete();
-        if (!$isDelete) {
-            throw new PublicException('Contact information not found',404);
-        }
+        $this->canUpdate($user);
+        $this->contactInformation->findOrFail($id)->delete();
     }
 }

@@ -18,12 +18,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->text('content')->nullable();
             $table->decimal('price');
-            $table->string('url')->nullable();
+            $table->string('url');
             $table->string('route_check')->nullable();
             $table->unsignedSmallInteger('status')->default(500);
             $table->boolean('can_check')->default(false);
-            $table->dateTime('start_at')->nullable();
-            $table->dateTime('end_at')->useCurrent();
+            $table->dateTime('start_at')->useCurrent();
+            $table->dateTime('end_at')->nullable();
         });
     }
 
