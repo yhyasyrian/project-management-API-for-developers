@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ContactInformationController;
 
 Route::prefix('auth')->group(function () {
@@ -20,3 +21,4 @@ Route::apiResource('/user/{user}/contact-information', ContactInformationControl
     ->middleware(['auth:api']);
 
 Route::apiResource('/project', ProjectController::class);
+Route::apiResource('/experience', ExperienceController::class)->except(['show']);

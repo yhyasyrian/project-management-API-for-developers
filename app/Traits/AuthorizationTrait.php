@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use App\Enums\AuthorizationActionEnum;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,10 +25,7 @@ trait AuthorizationTrait
      */
     protected function can(AuthorizationActionEnum $action, $model = null)
     {
-        if (auth()->check() && auth()->user()->can($action->value, $model)) {
-            return;
-        }
-        abort(403, 'Unauthorized');
+        Gate::authorize($action->value, $model);
     }
 
     /**
