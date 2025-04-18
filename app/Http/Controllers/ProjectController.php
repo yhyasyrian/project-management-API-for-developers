@@ -12,6 +12,13 @@ use App\Http\Requests\Projects\UpdateRequest;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
+/**
+ * Controller for managing projects
+ *
+ * This controller handles the creation, updating, and deletion of projects
+ * through RESTful endpoints. It utilizes the ProjectService for business logic
+ * and enforces authorization checks using the AuthorizationTrait.
+ */
 class ProjectController extends Controller implements HasMiddleware
 {
     public function __construct(private ProjectService $projectService)

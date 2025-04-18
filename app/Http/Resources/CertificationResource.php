@@ -18,7 +18,7 @@ class CertificationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'date' => $this->date->format('Y/m/d'),
+            'date' => $this->date->format('Y-m-d'),
             'url' => $this->url,
             'id_check' => $this->id_check,
         ];

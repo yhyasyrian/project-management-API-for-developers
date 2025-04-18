@@ -2,11 +2,8 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ExperienceController;
-use App\Http\Controllers\ContactInformationController;
+use App\Http\Controllers\{AuthController,UserController};
+use App\Http\Controllers\{ProjectController,ExperienceController,CertificationController,ContactInformationController};
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->middleware(['throttle:5,3']);
@@ -22,3 +19,4 @@ Route::apiResource('/user/{user}/contact-information', ContactInformationControl
 
 Route::apiResource('/project', ProjectController::class);
 Route::apiResource('/experience', ExperienceController::class)->except(['show']);
+Route::apiResource('/certification', CertificationController::class)->except(['show']);
