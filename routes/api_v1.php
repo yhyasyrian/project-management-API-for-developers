@@ -2,8 +2,9 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController,UserController};
-use App\Http\Controllers\{ProjectController,ExperienceController,CertificationController,ContactInformationController};
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\{AuthController, UserController};
+use App\Http\Controllers\{ProjectController, ExperienceController, CertificationController, ContactInformationController};
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->middleware(['throttle:5,3']);
@@ -20,3 +21,5 @@ Route::apiResource('/user/{user}/contact-information', ContactInformationControl
 Route::apiResource('/project', ProjectController::class);
 Route::apiResource('/experience', ExperienceController::class)->except(['show']);
 Route::apiResource('/certification', CertificationController::class)->except(['show']);
+Route::apiResource('/project/{project}/tag', TagController::class)->only(['store', 'update', 'destroy']);
+Route::delete('/project/{project}/tag', [TagController::class, 'destroy']);
